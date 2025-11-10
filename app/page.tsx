@@ -2,11 +2,14 @@
 
 import Link from 'next/link';
 import LoadingScreen from './components/LoadingScreen';
-
+import AnimatedBackground from './components/AnimatedBackground';
+import CustomCursor from './components/CustomCursor';
 export default function Home() {
   return (
     <>
+      <AnimatedBackground />
       <LoadingScreen />
+      <CustomCursor />
       <div className="min-h-screen bg-background">
         {/* Header */}
         <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
