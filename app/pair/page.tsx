@@ -16,19 +16,13 @@ export default function PairPage() {
       return;
     }
 
-    const apiUrl = process.env.NEXT_PUBLIC_API || "http://ballast.proxy.rlwy.net:11473";
-    if (!apiUrl) {
-      setError('API URL is not configured. Please contact the administrator.');
-      return;
-    }
-
     setLoading(true);
     setError('');
     setPairCode('');
     setSuccess(false);
 
     try {
-      const response = await fetch(`${apiUrl}/pair?code=${phoneNumber}`);
+      const response = await fetch(`/api/pair?code=${phoneNumber}`);
       
       if (!response.ok) {
         throw new Error(`Server responded with status ${response.status}`);
