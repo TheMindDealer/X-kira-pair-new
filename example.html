@@ -1,0 +1,574 @@
+p<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>X-kira MD | FREE WhatsApp Bot</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co/Rks7b8rJ/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/27vZkKR2/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://i.ibb.co/6RChJDjq/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+      @import url('https://fonts.googleapis.com/css2?family=Anton&family=Geist:wght@100..900&display=swap');
+      @font-face {
+                  font-family: 'Thunder';
+                  src: url('https://static.ryznn.xyz/geiss/thunder.woff2') format('woff2');
+                        }
+      :root {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 98%;
+  --card: 0 0% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 0 0% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 0 0% 98%;
+  --primary-foreground: 0 0% 9%;
+  --secondary: 0 0% 14.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 0 0% 14.9%;
+  --muted-foreground: 0 0% 63.9%;
+  --accent: 0 0% 14.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 14.9%;
+  --input: 0 0% 14.9%;
+  --ring: 0 0% 83.1%;
+  }
+
+  .thunder {
+       font-family: "Thunder", sans-serif;
+
+  }
+  body {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      font-family: 'Geist', system-ui, -apple-system, sans-serif;
+      background-color: hsl(var(--background));
+      color: hsl(var(--foreground));
+      position: relative; /* Needed for the pseudo-element positioning */
+  }
+
+  body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0); /* Adjust opacity for blur intensity */
+  backdrop-filter: blur(10px); /* Adjust blur radius as needed */
+  z-index: -1;
+  }
+
+  .bg-background { background-color: hsl(var(--background)); }
+  .bg-card { background-color: hsl(var(--card)); }
+  .bg-muted { background-color: hsl(var(--muted)); }
+  .bg-primary { background-color: hsl(var(--primary)); }
+  .text-primary-foreground { color: hsl(var(--primary-foreground)); }
+  .text-muted-foreground { color: hsl(var(--muted-foreground)); }
+  .border-border { border-color: hsl(var(--border)); }
+
+  .gradient-text {
+  background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  }
+
+  .gradient-border {
+  background: linear-gradient(135deg, #27272a 0%, #18181b 100%);
+  border: 1px solid hsl(var(--border));
+  }
+
+  .glow-button {
+  position: relative;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  transition: all 0.3s ease;
+  }
+
+  .glow-button:hover {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+  }
+
+  .glow-button:active {
+  transform: translateY(0);
+  }
+
+  .secondary-button {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  transition: all 0.3s ease;
+  }
+
+  .secondary-button:hover {
+  background: hsl(var(--muted));
+  border-color: hsl(var(--muted-foreground));
+  }
+
+  .card-hover {
+  transition: all 0.3s ease;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  }
+
+  .card-hover:hover {
+  transform: translateY(-2px);
+  border-color: hsl(var(--muted-foreground));
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  }
+
+  .deploy-option {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  }
+
+  .deploy-option.show {
+  opacity: 1;
+  transform: translateY(0);
+  }
+
+  .text-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  }
+
+  .hero-grid {
+  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 0);
+  background-size: 20px 20px;
+  }
+
+  .feature-icon {
+  background: linear-gradient(135deg, #27272a 0%, #18181b 100%);
+  border: 1px solid hsl(var(--border));
+  }
+
+  @keyframes fadeIn {
+  from { opacity: 0; filter: blur(10px); transform: translateY(10px); }
+  to { opacity: 1; filter: blur(0px); transform: translateY(0); }
+  }
+
+  @keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+  }
+
+  .animate-slide-up {
+  animation: slideUp 0.8s ease-out;
+  }
+
+  .code-block {
+  background: #0a0a0a;
+  border: 1px solid #27272a;
+  font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+  }
+
+  .nav-link {
+  color: hsl(var(--muted-foreground));
+  transition: color 0.2s ease;
+  }
+
+  .nav-link:hover {
+  color: hsl(var(--foreground));
+}
+
+    /* New CSS for instruction sections */
+    .instruction-section {
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.7s ease-out, opacity 0.7s ease-out; /* Increase duration for smoother transition */
+    }
+
+    .instruction-section.show {
+        opacity: 1;
+        max-height: 750px; /* Adjust based on expected content height */
+        transition: max-height 0.7s ease-in, opacity 0.7s ease-in; /* Increase duration for smoother transition */
+    }
+  </style>
+</head>
+<body class="bg-background min-h-screen">
+  <header class="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+  <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+  <div class="flex items-center">
+  <div class="border border-neutral-600 rounded-full flex items-center justify-center">
+
+  </div>
+  <div>
+  </div>
+  </div>
+  <nav class="hidden md:flex space-x-8">
+  <a href="#features" class="nav-link text-sm font-medium">Features</a>
+  <a href="#getting-started" class="nav-link text-sm font-medium">Get Started</a>
+  </nav>
+  </div>
+  </header>
+  <section class="hero-grid py-24 relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/20"></div>
+  <div class="container mx-auto px-6 text-center relative z-10">
+  <div class="animate-fade-in max-w-4xl mx-auto">
+  <h1 class="text-[6em] md:text-[8em] mb-6 mt-16 thunder">
+  <span class="text-gradient">x-kira</span><span class="text-indigo-500">.</span>
+  </h1>
+  <p class="text-xl md:text-2xl mb-14 text-muted-foreground max-w-2xl mx-auto font-light">
+  Free WhatsApp Bot with advanced features 
+  </p>
+  <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+  <button onclick="getSession()" class="glow-button px-8 py-3 rounded-lg font-semibold text-lg tracking-tight">
+  pair x-kira pro
+  </button>
+  <button onclick="toggleDeploy()" class="secondary-button font-semibold px-8 py-3 rounded-lg tracking-tight text-lg">
+  pair x-kira 
+  </button>
+  </div>
+  </div>
+  </div>
+  </section>
+
+  <div id="deployOptions" class="hidden border-b border-border bg-card/50">
+    <div class="container mx-auto px-6 py-12">
+        <h3 class="text-2xl font-semibold text-center mb-8">Choose your deployment platform</h3>
+        <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div class="deploy-option card-hover rounded-lg p-6 text-center cursor-pointer" onclick="deployTo('render')">
+                <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-bolt text-indigo-400"></i>
+                </div>
+                <h4 class="text-lg font-semibold mb-2">Render</h4>
+                <p class="text-muted-foreground text-sm">Deploy with automatic builds and free hosting</p>
+            </div>
+            <div class="deploy-option card-hover rounded-lg p-6 text-center cursor-pointer" onclick="deployTo('koyeb')">
+                <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-rocket text-indigo-400"></i>
+                </div>
+                <h4 class="text-lg font-semibold mb-2">Koyeb</h4>
+                <p class="text-muted-foreground text-sm">Global edge hosting with automatic scaling</p>
+            </div>
+            <div class="deploy-option card-hover rounded-lg p-6 text-center cursor-pointer" onclick="deployTo('panel')">
+                <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-gears text-indigo-400"></i> 
+                </div>
+                <h4 class="text-lg font-semibold mb-2">Custom VPS/RDP</h4> <p class="text-muted-foreground text-sm">Deploy to your own server</p>
+            </div>
+            <div class="deploy-option card-hover rounded-lg p-6 text-center cursor-pointer" onclick="deployTo('pterodactyl')">
+                <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-sailboat text-indigo-400"></i>
+                </div>
+                <h4 class="text-lg font-semibold mb-2">Panel</h4>
+                <p class="text-muted-foreground text-sm">Easy deployment on Pterodactyl-powered servers</p>
+            </div>
+        </div>
+
+        <div id="renderInstructions" class="instruction-section mt-12 py-8 bg-card border border-border rounded-lg max-w-4xl mx-auto">
+            <h4 class="text-xl font-semibold text-center mb-6">Deploy to Render</h4>
+            <div class="px-6 space-y-4">
+                <p class="text-muted-foreground text-sm">
+                    Render offers automatic builds and free hosting for eligible projects. Follow these steps to deploy Raganork-MD:
+                </p>
+                <div class="flex justify-center mt-6">
+                    <a href="https://render.raganork.site" target="_blank" class="glow-button px-6 py-2 rounded-lg font-semibold text-sm">
+                        <i class="fa-solid fa-cloud-arrow-up mr-2"></i>Go to Deployer
+                    </a>
+                </div>
+                <p class="text-center text-xs text-muted-foreground mt-4">
+                    After deploying, you should go to the Environment Variables section and add the SESSION variable.
+                </p>
+            </div>
+        </div>
+
+        <div id="koyebInstructions" class="instruction-section mt-12 py-8 bg-card border border-border rounded-lg max-w-4xl mx-auto">
+            <h4 class="text-xl font-semibold text-center mb-6">Deploy to Koyeb</h4>
+            <div class="px-6 space-y-4">
+                <p class="text-muted-foreground text-sm">
+                    Koyeb provides global edge hosting with automatic scaling. Here's how to get your bot running:
+                </p>
+                <ol class="list-decimal list-inside text-muted-foreground text-sm space-y-2">
+                    <li>Click the "Deploy to Koyeb" button below.</li>
+                    <li>Sign in or create a Koyeb account.</li>
+                    <li>Expand environment variables section.</li>
+                    <li>Add necessary environment variables (SESSION & DATABASE_URL).</li>
+                    <li>Adding a postgres DATABASE_URL (Mandatory).</li>
+                    <li>Confirm deployment to launch your service.</li>
+                </ol>
+                <div class="flex justify-center mt-6">
+                    <a href="https://app.koyeb.com/deploy?type=docker&name=raganork-md&env[SESSION]=&env[DATABASE_URL]=&image=quay.io/souravkl11/raganork-md:latest" target="_blank" class="glow-button px-6 py-2 rounded-lg font-semibold text-sm">
+                        <i class="fa-solid fa-cloud-arrow-up mr-2"></i>Deploy to Koyeb
+                    </a>
+                </div>
+                <p class="text-center text-xs text-muted-foreground mt-4">
+                    For more details, visit the <a href="https://github.com/souravkl11/raganork-md#deployment" target="_blank" class="text-indigo-400 hover:underline">GitHub deployment guide</a>.
+                </p>
+            </div>
+        </div>
+
+        <div id="panelInstructions" class="instruction-section mt-12 py-8 bg-card border border-border rounded-lg max-w-4xl mx-auto">
+        <h4 class="text-xl font-semibold text-center mb-6">Deploy to Your RDP/VPS</h4>
+        <div class="px-6 space-y-4">
+            <p class="text-muted-foreground text-sm">
+                To install Raganork-MD on your VPS, simply run the following command in your terminal:
+            </p>
+            <div class="code-block rounded-lg p-2 text-xs mt-2 text-center flex flex-col items-center">
+                <span class="text-indigo-400"># One-line installation</span><br>
+                <span id="vpsInstallCmd" class="text-gray-300 select-all">bash &lt;(curl -s https://raganork.site/install.sh)</span>
+                <button onclick="copyVpsCmd()" class="glow-button px-4 py-1 mt-2 rounded font-semibold text-xs flex items-center justify-center" style="min-width:100px;">
+                    <i class="fa-solid fa-copy mr-2"></i>Copy Command
+                </button>
+            </div>
+            <p class="text-muted-foreground text-sm mt-4 text-center">
+                This will automatically set up everything for you.<br>
+                For manual steps or troubleshooting, see the <a href="https://github.com/souravkl11/raganork-md#deployment" target="_blank" class="text-indigo-400 hover:underline">GitHub deployment guide</a>.
+            </p>
+        </div>
+    </div>
+
+        <div id="pterodactylInstructions" class="instruction-section mt-12 py-8 bg-card border border-border rounded-lg max-w-4xl mx-auto overflow-x-auto">
+            <h4 class="text-xl font-semibold text-center mb-6">Deploy to Panel</h4>
+            <div class="px-6 space-y-4">
+                <p class="text-muted-foreground text-sm">
+                    Deploying Raganork-MD on a Panel is simple using our dedicated JavaScript setup script.<br>
+                    You will need access to your server's console or file manager.
+                </p>
+                <ol class="list-decimal list-inside text-muted-foreground text-sm space-y-2">
+                    <li>
+                        Log in to your Panel and navigate to your server.<br>
+                        Ensure your server has internet access and Node.js installed.
+                    </li>
+                    <li>
+                        Click the button below to copy the setup script command.<br>
+                        <span class="font-bold text-indigo-400">Remember to add your actual Raganork-MD session string in the script if required.</span>
+                    </li>
+                        <div class="flex justify-center mt-6">
+                            <button onclick="copyScript('/panel.js')" class="glow-button px-6 py-2 rounded-lg font-semibold text-sm">
+                                <i class="fa-solid fa-copy mr-2"></i>Copy Setup Script
+                            </button>
+                        </div>
+                    <li>
+                        Create a file called <span class="text-yellow-300">start.js</span> in your panel, and paste the script content into it. Add your session string as needed.
+                    </li>
+                    <li>
+                        <b>If your panel has a "Start File" field:</b> Enter <code class="text-yellow-300">start.js</code>.<br>
+                        <b>If your panel has a "Start Command" field:</b> Enter <code class="text-yellow-300">node start.js</code>.
+                    </li>
+                    <li>
+                        Start your server/bot from the Panel.<br>
+                        Monitor the console for any errors or completion messages.
+                    </li>
+                </ol>
+                <p class="text-center text-xs text-muted-foreground mt-4">
+                    This method requires your server to have Node.js installed, which is standard on most panels.<br>
+                    For more details, see the <a href="https://github.com/souravkl11/raganork-md#deployment" target="_blank" class="text-indigo-400 hover:underline">GitHub deployment guide</a>.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+  <section id="features" class="py-24">
+  <div class="container mx-auto px-6">
+  <div class="text-center mb-16 animate-slide-up">
+  <h2 class="text-4xl font-bold mb-4">Built for performance</h2>
+  <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+  Enterprise-grade features with developer-first experience
+  </p>
+  </div>
+
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="card-hover rounded-lg p-6">
+  <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4">
+  <i class="fa-solid fa-bolt text-indigo-400"></i>
+  </div>
+  <h3 class="text-lg font-semibold mb-2">Lightning Fast</h3>
+  <p class="text-muted-foreground text-sm">Optimized for speed with minimal resource usage</p>
+  </div>
+
+  <div class="card-hover rounded-lg p-6">
+  <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4">
+  <i class="fa-solid fa-mobile-screen text-indigo-400"></i>
+  </div>
+  <h3 class="text-lg font-semibold mb-2">Multi-Device</h3>
+  <p class="text-muted-foreground text-sm">Full WhatsApp Web multi-device support</p>
+  </div>
+
+  <div class="card-hover rounded-lg p-6">
+  <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4">
+      <i class="fa-solid fa-plug text-indigo-400"></i>
+  </div>
+  <h3 class="text-lg font-semibold mb-2">Plugin System</h3>
+  <p class="text-muted-foreground text-sm">Extensible architecture with custom plugins</p>
+  </div>
+
+  <div class="card-hover rounded-lg p-6">
+  <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4">
+<i class="fa-solid fa-user-group text-indigo-400"></i>
+</div>
+  <h3 class="text-lg font-semibold mb-2">Group Management</h3>
+  <p class="text-muted-foreground text-sm">Advanced admin tools and moderation</p>
+  </div>
+
+  <div class="card-hover rounded-lg p-6">
+  <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4">
+<i class="fa-solid fa-download text-indigo-400"></i>
+</div>
+  <h3 class="text-lg font-semibold mb-2">Media Downloads</h3>
+  <p class="text-muted-foreground text-sm">Built-in media processing and downloads</p>
+  </div>
+
+  <div class="card-hover rounded-lg p-6">
+  <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4">
+<i class="fa-solid fa-gears text-indigo-400"></i> 
+</div>
+  <h3 class="text-lg font-semibold mb-2">Configurable</h3>
+  <p class="text-muted-foreground text-sm">Flexible commands and extensive configuration</p>
+  </div>
+  </div>
+  </div>
+  </section>
+
+  <section id="getting-started" class="py-24 bg-muted/20">
+  <div class="container mx-auto px-6">
+  <div class="text-center mb-16">
+  <h2 class="text-4xl font-bold mb-4">Get started in seconds</h2>
+  <p class="text-xl text-muted-foreground">Three simple steps to deploy your bot</p>
+  </div>
+
+  <div class="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+  <div class="space-y-8">
+  <div class="flex items-start space-x-4">
+  <div class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center font-semibold text-sm">1</div>
+  <div>
+  <h3 class="text-lg font-semibold mb-2">Generate pair code</h3>
+  <p class="text-muted-foreground">click x-kira pair button enter your WhatsApp number with country code</p>
+  </div>
+  </div>
+
+  <div class="flex items-start space-x-4">
+  <div class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center font-semibold text-sm">2</div>
+  <div>
+  <h3 class="text-lg font-semibold mb-2">How to link device</h3>
+  <p class="text-muted-foreground">go to your WhatsApp click 3 dot click link device paste your code</p>
+  </div>
+  </div>
+
+  <div class="flex items-start space-x-4">
+  <div class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center font-semibold text-sm">3</div>
+  <div>
+  <h3 class="text-lg font-semibold mb-2">successful pair</h3>
+  <p class="text-muted-foreground"> type .menu see all feature</p>
+  </div>
+  </div>
+  </div>
+
+  <div class="bg-card border border-border rounded-lg p-6">
+  <h3 class="text-lg font-semibold mb-4">Quick Setup</h3>
+  <div class="code-block rounded-lg p-4 text-sm">
+  </div>
+  </div>
+  </div>
+  </div>
+  </section>
+
+  <section class="py-24 border-t border-border">
+  <div class="container mx-auto px-6">
+  <div class="grid md:grid-cols-3 gap-8 text-center">
+  <div>
+  <div class="text-3xl font-bold mb-2">142+</div>
+  <div class="text-muted-foreground">Active Deployments</div>
+  </div>
+  <div>
+  <div class="text-3xl font-bold mb-2">99.9%</div>
+  <div class="text-muted-foreground">Uptime</div>
+  </div>
+  <div>
+  <div class="text-3xl font-bold mb-2">100+</div>
+  <div class="text-muted-foreground">Built-in Features</div>
+  </div>
+  </div>
+  </div>
+  </section>
+
+  <footer class="border-t border-border py-12">
+  <div class="container mx-auto px-6">
+  <div class="grid md:grid-cols-4 gap-8">
+  <div>
+  <div class="flex items-center space-x-2 mb-4">
+  <div class="w-6 h-6 bg-white rounded flex items-center justify-center">
+  <span class="text-black font-bold text-xs">R</span>
+  </div>
+  <span class="font-semibold">X-kira MD</span>
+  </div>
+  <p class="text-muted-foreground text-sm">Advanced WhatsApp bot framework for developers.</p>
+  </div>
+  <div>
+  <h3 class="font-semibold mb-3">Product</h3>
+  <div class="space-y-2 text-sm">
+  <a href="#features" class="block text-muted-foreground hover:text-foreground transition-colors">Features</a>
+  <a href="#getting-started" class="block text-muted-foreground hover:text-foreground transition-colors">Documentation</a>
+  <a href="https://github.com/sumon9836" class="block text-muted-foreground hover:text-foreground transition-colors">GitHub</a>
+  </div>
+  </div>
+  </div>
+  <div class="border-t border-border mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+  <p class="text-muted-foreground text-sm">&copy; 2025 x-kira-MD.</p>
+  <p class="text-muted-foreground text-sm mt-2 md:mt-0">Built for the developer community</p>
+  </div>
+  </div>
+  </footer>
+  <script>
+
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            const headerHeight = 80;
+
+            if (target) {
+                const elementRect = target.getBoundingClientRect();
+                const absoluteElementTop = elementRect.top + window.scrollY;
+                const scrollToPosition = absoluteElementTop - headerHeight;
+
+                window.scrollTo({
+                    top: scrollToPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Intersection observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.card-hover').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'all 0.6s ease';
+        observer.observe(el);
+    });
+</script>
+</body>
+</html>
