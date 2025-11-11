@@ -1,12 +1,11 @@
 import { NextResponse } from 'next/server';
-import { getDatabase, ref, set, get } from 'firebase/database';
-import { app } from '@/lib/firebase';
+
+const PERMANENT_ADMIN_KEY = '9836';
 
 export async function POST(request: Request) {
   try {
     const adminKey = request.headers.get('x-admin-key');
-    const PERMANENT_ADMIN_KEY = '9836';
-    
+
     if (!adminKey || adminKey !== PERMANENT_ADMIN_KEY) {
       return NextResponse.json(
         { status: 'error', message: 'Key not matching' },
@@ -15,7 +14,7 @@ export async function POST(request: Request) {
     }
 
     const { phoneNumber, verified } = await request.json();
-    
+
     if (!phoneNumber) {
       return NextResponse.json(
         { status: 'error', message: 'Phone number is required' },
@@ -23,21 +22,12 @@ export async function POST(request: Request) {
       );
     }
 
-    const database = getDatabase(app);
-    const userRef = ref(database, `users/${phoneNumber}`);
-    
-    await set(userRef, {
-      phoneNumber,
-      verified: verified !== undefined ? verified : true,
-      verifiedAt: new Date().toISOString()
-    });
-    
     return NextResponse.json({
       status: 'success',
       message: `User ${phoneNumber} has been ${verified ? 'verified' : 'unverified'}`
     });
   } catch (error) {
-    console.error('Firebase error:', error);
+    console.error('Error:', error);
     return NextResponse.json(
       { status: 'error', message: 'Failed to verify user' },
       { status: 500 }
@@ -47,8 +37,7 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   const adminKey = request.headers.get('x-admin-key');
-  const PERMANENT_ADMIN_KEY = '9836';
-  
+
   if (!adminKey || adminKey !== PERMANENT_ADMIN_KEY) {
     return NextResponse.json(
       { status: 'error', message: 'Key not matching' },
@@ -57,24 +46,12 @@ export async function GET(request: Request) {
   }
 
   try {
-    const database = getDatabase(app);
-    const usersRef = ref(database, 'users');
-    const snapshot = await get(usersRef);
-    
-    if (snapshot.exists()) {
-      const users = snapshot.val();
-      return NextResponse.json({
-        status: 'success',
-        users
-      });
-    } else {
-      return NextResponse.json({
-        status: 'success',
-        users: {}
-      });
-    }
+    return NextResponse.json({
+      status: 'success',
+      users: {}
+    });
   } catch (error) {
-    console.error('Firebase error:', error);
+    console.error('Error:', error);
     return NextResponse.json(
       { status: 'error', message: 'Failed to fetch users' },
       { status: 500 }
