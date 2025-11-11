@@ -18,32 +18,72 @@ export default function AdminPage() {
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState<'success' | 'error'>('success');
 
-  const handleLogin = () => {
-    if (adminKey) {
-      localStorage.setItem('adminKey', adminKey);
-      setIsAuthenticated(true);
-      fetchUsers(adminKey);
+  const handleLogin = async () => {
+    if (!adminKey) return;
+    
+    setLoading(true);
+    try {
+      const response = await fetch('/api/admin/verify-user', {
+        method: 'GET',
+        headers: {
+          'x-admin-key': adminKey,
+        },
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok && data.status === 'success') {
+        sessionStorage.setItem('adminKey', adminKey);
+        setIsAuthenticated(true);
+        setUsers(data.users || {});
+        setMessage('');
+      } else {
+        setMessage('Invalid admin key');
+        setMessageType('error');
+        setIsAuthenticated(false);
+      }
+    } catch (error) {
+      setMessage('Login failed');
+      setMessageType('error');
+      setIsAuthenticated(false);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('adminKey');
+    sessionStorage.removeItem('adminKey');
     setIsAuthenticated(false);
     setAdminKey('');
     setUsers({});
   };
 
-  const fetchUsers = async (key: string) => {
+  const fetchUsers = async () => {
+    const key = sessionStorage.getItem('adminKey');
+    if (!key) {
+      setIsAuthenticated(false);
+      return;
+    }
+
     setLoading(true);
     try {
-      const response = await fetch(`/api/admin/verify-user?adminKey=${key}`);
+      const response = await fetch('/api/admin/verify-user', {
+        method: 'GET',
+        headers: {
+          'x-admin-key': key,
+        },
+      });
       const data = await response.json();
       
-      if (data.status === 'success') {
+      if (response.ok && data.status === 'success') {
         setUsers(data.users || {});
+        setIsAuthenticated(true);
       } else {
         setMessage('Failed to fetch users');
         setMessageType('error');
+        if (response.status === 401) {
+          handleLogout();
+        }
       }
     } catch (error) {
       setMessage('Error fetching users');
@@ -54,30 +94,39 @@ export default function AdminPage() {
   };
 
   const handleVerifyUser = async (phoneNumber: string, verified: boolean) => {
+    const key = sessionStorage.getItem('adminKey');
+    if (!key) {
+      setIsAuthenticated(false);
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await fetch('/api/admin/verify-user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-admin-key': key,
         },
         body: JSON.stringify({
           phoneNumber,
           verified,
-          adminKey: localStorage.getItem('adminKey'),
         }),
       });
 
       const data = await response.json();
       
-      if (data.status === 'success') {
+      if (response.ok && data.status === 'success') {
         setMessage(data.message);
         setMessageType('success');
-        fetchUsers(localStorage.getItem('adminKey') || '');
+        fetchUsers();
         setNewPhoneNumber('');
       } else {
         setMessage(data.message || 'Failed to update user');
         setMessageType('error');
+        if (response.status === 401) {
+          handleLogout();
+        }
       }
     } catch (error) {
       setMessage('Error updating user');
@@ -94,11 +143,10 @@ export default function AdminPage() {
   };
 
   useEffect(() => {
-    const savedKey = localStorage.getItem('adminKey');
+    const savedKey = sessionStorage.getItem('adminKey');
     if (savedKey) {
       setAdminKey(savedKey);
-      setIsAuthenticated(true);
-      fetchUsers(savedKey);
+      fetchUsers();
     }
   }, []);
 
@@ -151,9 +199,10 @@ export default function AdminPage() {
 
                   <button
                     onClick={handleLogin}
+                    disabled={loading}
                     className="glow-button w-full px-6 py-3 rounded-lg font-semibold text-lg"
                   >
-                    Login
+                    {loading ? 'Verifying...' : 'Login'}
                   </button>
                 </div>
               </div>
@@ -176,7 +225,7 @@ export default function AdminPage() {
           </Link>
           <div className="flex items-center gap-4">
             <button
-              onClick={() => fetchUsers(localStorage.getItem('adminKey') || '')}
+              onClick={fetchUsers}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               disabled={loading}
             >

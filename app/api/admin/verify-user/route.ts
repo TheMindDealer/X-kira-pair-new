@@ -4,14 +4,16 @@ import { app } from '@/lib/firebase';
 
 export async function POST(request: Request) {
   try {
-    const { phoneNumber, verified, adminKey } = await request.json();
+    const adminKey = request.headers.get('x-admin-key');
     
-    if (adminKey !== process.env.ADMIN_KEY) {
+    if (!adminKey || adminKey !== process.env.ADMIN_KEY) {
       return NextResponse.json(
         { status: 'error', message: 'Unauthorized' },
         { status: 401 }
       );
     }
+
+    const { phoneNumber, verified } = await request.json();
     
     if (!phoneNumber) {
       return NextResponse.json(
@@ -43,10 +45,9 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const adminKey = searchParams.get('adminKey');
+  const adminKey = request.headers.get('x-admin-key');
   
-  if (adminKey !== process.env.ADMIN_KEY) {
+  if (!adminKey || adminKey !== process.env.ADMIN_KEY) {
     return NextResponse.json(
       { status: 'error', message: 'Unauthorized' },
       { status: 401 }
