@@ -1,14 +1,9 @@
 
 import { NextResponse } from 'next/server';
+import { database } from '@/lib/firebase';
+import { ref, get, set, update } from 'firebase/database';
 
 const PERMANENT_ADMIN_KEY = '9836';
-
-// In-memory storage for verified users
-const verifiedUsers: Record<string, {
-  phoneNumber: string;
-  verified: boolean;
-  verifiedAt: string;
-}> = {};
 
 export async function POST(request: Request) {
   try {
@@ -30,12 +25,13 @@ export async function POST(request: Request) {
       );
     }
 
-    // Store or update user verification status
-    verifiedUsers[phoneNumber] = {
+    // Store user in Firebase
+    const userRef = ref(database, `users/${phoneNumber}`);
+    await set(userRef, {
       phoneNumber,
       verified: verified !== undefined ? verified : true,
       verifiedAt: new Date().toISOString()
-    };
+    });
 
     return NextResponse.json({
       status: 'success',
@@ -61,9 +57,15 @@ export async function GET(request: Request) {
   }
 
   try {
+    // Fetch all users from Firebase
+    const usersRef = ref(database, 'users');
+    const snapshot = await get(usersRef);
+    
+    const users = snapshot.exists() ? snapshot.val() : {};
+
     return NextResponse.json({
       status: 'success',
-      users: verifiedUsers
+      users
     });
   } catch (error) {
     console.error('Error:', error);

@@ -1,21 +1,7 @@
 
 import { NextResponse } from 'next/server';
-
-// Import the same storage reference (this works because Next.js API routes share memory in dev)
-// For production, you'd want to use a proper database
-const getVerifiedUsers = async () => {
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:5000'}/api/admin/verify-user`, {
-      headers: {
-        'x-admin-key': '9836'
-      }
-    });
-    const data = await response.json();
-    return data.users || {};
-  } catch {
-    return {};
-  }
-};
+import { database } from '@/lib/firebase';
+import { ref, get } from 'firebase/database';
 
 export async function GET(request: Request) {
   try {
@@ -24,24 +10,34 @@ export async function GET(request: Request) {
 
     if (!phoneNumber) {
       return NextResponse.json(
-        { verified: false, message: 'Phone number is required' },
+        { status: 'error', message: 'Phone number is required' },
         { status: 400 }
       );
     }
 
-    // Check if user is verified in storage
-    const users = await getVerifiedUsers();
-    const user = users[phoneNumber];
+    // Check user in Firebase
+    const userRef = ref(database, `users/${phoneNumber}`);
+    const snapshot = await get(userRef);
+
+    if (!snapshot.exists()) {
+      return NextResponse.json({
+        status: 'error',
+        message: 'User not found',
+        verified: false
+      });
+    }
+
+    const userData = snapshot.val();
 
     return NextResponse.json({
-      verified: user ? user.verified : false,
-      phoneNumber,
-      data: user
+      status: 'success',
+      verified: userData.verified === true,
+      user: userData
     });
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error checking user:', error);
     return NextResponse.json(
-      { verified: false, message: 'Failed to check user' },
+      { status: 'error', message: 'Failed to check user verification status' },
       { status: 500 }
     );
   }
