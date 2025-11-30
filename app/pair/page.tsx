@@ -9,6 +9,7 @@ export default function PairPage() {
   const [pairCode, setPairCode] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const handlePair = async () => {
     if (!phoneNumber) {
@@ -22,30 +23,68 @@ export default function PairPage() {
     setSuccess(false);
 
     try {
-      const response = await fetch(`/api/pair?code=${phoneNumber}`);
-      
-      if (!response.ok) {
-        throw new Error(`Server responded with status ${response.status}`);
-      }
-      
+      const response = await fetch(`/api/pair?number=${phoneNumber}`);
       const data = await response.json();
 
-      if (data.status === 'success') {
-        setPairCode(data.code);
+      console.log('API Response:', { status: response.status, data });
+
+      // Handle successful response (200)
+      if (response.ok && data.success) {
+        setPairCode(data.pairingCode);
         setSuccess(true);
-      } else if (data.status === 'error') {
-        if (data.message === 'This number is blocked') {
-          setError('blocked');
-        } else if (data.message === 'This number is already connected' || data.connected) {
-          setError('connected');
-        } else {
-          setError(data.message || 'An error occurred');
-        }
+        return;
       }
+
+      // Handle 408 - Already Connected
+      if (response.status === 408) {
+        setError('connected');
+        return;
+      }
+
+      // Handle 409 - Already Pairing
+      if (response.status === 409) {
+        setError('This number is already in pairing process. Please wait a few minutes and try again.');
+        return;
+      }
+
+      // Handle specific error messages from backend
+      if (data.message) {
+        if (data.message.toLowerCase().includes('blocked')) {
+          setError('blocked');
+          return;
+        } else if (data.message.toLowerCase().includes('already connected')) {
+          setError('connected');
+          return;
+        } else if (data.message.toLowerCase().includes('already in pairing')) {
+          setError('This number is already in pairing process. Please wait a few minutes and try again.');
+          return;
+        } else if (data.message.toLowerCase().includes('phone number')) {
+          setError('Please enter a valid phone number (with country code)');
+          return;
+        }
+        // Show backend error message
+        setError(data.message);
+        return;
+      }
+
+      // Handle other error cases
+      if (!response.ok) {
+        setError(`Error: Server responded with status ${response.status}. Please try again.`);
+        return;
+      }
+
+      // Fallback error
+      setError('Failed to generate pair code. Please try again.');
     } catch (err) {
       console.error('Pairing error:', err);
-      const errorMessage = err instanceof Error ? err.message : 'Failed to connect to the server. Please try again.';
-      setError(`Connection failed: ${errorMessage}. Please check your API configuration.`);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to connect to the server';
+      
+      // Check if it's a network error
+      if (err instanceof TypeError) {
+        setError('Network error: Unable to reach the server. Please check your connection and try again.');
+      } else {
+        setError(`Connection failed: ${errorMessage}. Please check your internet connection.`);
+      }
     } finally {
       setLoading(false);
     }
@@ -54,7 +93,9 @@ export default function PairPage() {
   const copyCode = () => {
     if (pairCode) {
       navigator.clipboard.writeText(pairCode);
-      alert('Code copied to clipboard!');
+      setCopied(true);
+      // Reset the copied state after 2 seconds
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -101,7 +142,7 @@ export default function PairPage() {
                       type="tel"
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
-                      placeholder="e.g., 917074029156"
+                      placeholder="e.g., 4678734466 or 917074029156 (with country code)"
                       className="input-field"
                       disabled={loading}
                     />
@@ -133,12 +174,20 @@ export default function PairPage() {
                     </div>
                     <button
                       onClick={copyCode}
-                      className="glow-button px-6 py-2 rounded-lg font-semibold"
+                      className={`px-6 py-2 rounded-lg font-semibold transition-all duration-300 ${
+                        copied
+                          ? 'bg-green-600 text-white'
+                          : 'glow-button'
+                      }`}
                     >
                       <svg className="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        {copied ? (
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        ) : (
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        )}
                       </svg>
-                      Copy Code
+                      {copied ? 'Copied!' : 'Copy Code'}
                     </button>
                   </div>
                   <button
@@ -182,7 +231,7 @@ export default function PairPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <h2 className="text-2xl font-bold mb-2">Already Connected</h2>
-                    <p className="text-lg">This number is already connected. Please logout from your bot and try again.</p>
+                    <p className="text-lg">This number is already connected to a bot. Please disconnect from WhatsApp and try again.</p>
                   </div>
                   <button
                     onClick={() => {
@@ -191,7 +240,7 @@ export default function PairPage() {
                     }}
                     className="secondary-button px-6 py-2 rounded-lg font-semibold"
                   >
-                    Try Again
+                    Try Another Number
                   </button>
                 </div>
               )}
@@ -204,6 +253,9 @@ export default function PairPage() {
                     </svg>
                     <h2 className="text-2xl font-bold mb-2">Error</h2>
                     <p className="text-lg">{error}</p>
+                    <p className="text-sm text-muted-foreground mt-3">
+                      If the problem persists, please try again later or contact support.
+                    </p>
                   </div>
                   <button
                     onClick={() => {
