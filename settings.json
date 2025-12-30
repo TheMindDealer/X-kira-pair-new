@@ -1,8 +1,8 @@
 {
   "personal": {
-    "name": "Your Name",
+    "name": "MrKrishna",
     "title": "Creative Developer",
-    "email": "your.email@example.com",
+    "email": "mrkanhusir8@gmail.com",
     "tagline": "Crafting digital experiences with precision and creativity",
     "description": "Specializing in modern web development and interactive design.",
     "availability": {
@@ -11,13 +11,13 @@
     }
   },
   "social": {
-    "github": "https://github.com/yourusername",
-    "linkedin": "https://linkedin.com/in/yourusername",
+    "github": "https://github.com/TheMindDealer",
+    "linkedin": "https://www.linkedin.com/in/mr-kanha-8a3155398?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
     "twitter": "https://twitter.com/yourusername"
   },
   "seo": {
-    "siteUrl": "https://yourwebsite.com",
-    "siteName": "Your Name Portfolio",
+    "siteUrl": "http://mrkanha.likesyou.org",
+    "siteName": "MrKrishna Portfolio",
     "siteDescription": "Modern portfolio showcasing creative development and design work. Specializing in React, Next.js, and interactive web experiences.",
     "keywords": [
       "web developer",
@@ -66,8 +66,8 @@
       "description": "A modern web application built with Next.js and TypeScript, featuring real-time data synchronization and advanced animations.",
       "longDescription": "Detailed description of the project, challenges faced, and solutions implemented. Include the impact and results achieved.",
       "tech": ["Next.js", "TypeScript", "Framer Motion", "TailwindCSS"],
-      "link": "https://project-alpha.com",
-      "github": "https://github.com/yourusername/project-alpha",
+      "link": "https://mrkrishnabot6935.render.com",
+      "github": "https://github.com/TheMindDealer/X-Kira-pair-new",
       "featured": true,
       "features": [
         "Real-time data synchronization",
